@@ -10,6 +10,7 @@ public class PlayerStat : MonoBehaviour
 
     [Header("Traffic Data")]
     public float speedAtTrigger;
+    public bool trafficSafety;
 
 
     // Other scripts will call this function
@@ -32,6 +33,14 @@ public class PlayerStat : MonoBehaviour
         speedAtTrigger = speed;
         Debug.Log("Traffic Check! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
     }
+
+    public void SaveTrafficState(bool state)
+    {
+        trafficSafety = state;
+        Debug.Log("traffic safe : " + trafficSafety);
+    }
+
+
 }
 
 

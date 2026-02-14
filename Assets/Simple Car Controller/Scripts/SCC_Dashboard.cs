@@ -21,6 +21,8 @@ public class SCC_Dashboard : MonoBehaviour {
     private float rpm = 0f;
     private float kmh = 0f;
 
+    public float speedState;
+
     //  Needles.
     public RectTransform RPMNeedle;
     public RectTransform KMHNeedle;
@@ -53,7 +55,7 @@ public class SCC_Dashboard : MonoBehaviour {
 
             rpm = car.currentEngineRPM * RPMNeedleMultiplier;
             kmh = car.speed * KMHNeedleMultiplier;
-
+            speedState = kmh;
         }
 
         //  Rotating the needles smoothly.

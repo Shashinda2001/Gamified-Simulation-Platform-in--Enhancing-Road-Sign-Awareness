@@ -1,8 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine;
 
 public class TrafficLightController : MonoBehaviour
 {
+
+     
+
     public GameObject redSphere;
     public GameObject yellowSphere;
     public GameObject greenSphere;
@@ -21,8 +25,10 @@ public class TrafficLightController : MonoBehaviour
         if (greenSphere) gLight = greenSphere.GetComponent<Light>();
 
         // Ensure all lights start OFF
-        SetLightStatus(false, false, false);
+        SetLightStatus(false, false, true);
     }
+
+    
     public void StartSequence()
     {
         StartCoroutine(LightRoutine());
@@ -47,5 +53,60 @@ public class TrafficLightController : MonoBehaviour
         if (rLight) rLight.enabled = r;
         if (yLight) yLight.enabled = y;
         if (gLight) gLight.enabled = g;
+    }
+
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        // 1. Disable collider immediately so it only runs once
+    //        GetComponent<BoxCollider>().enabled = false;
+
+    //        // 2. Check the state and log the result
+    //        if (gLight.enabled)
+    //        {
+    //            Debug.Log("Player Enter safe: Success");
+    //            // stats.RecordSuccess(); // Optional: send to PlayerStat
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("Player Enter unsafe: Violation");
+    //            // stats.RecordViolation(); // Optional: send to PlayerStat
+    //        }
+    //    }
+    //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // LOG 1: Did any object touch the trigger?
+        Debug.Log("Trigger touched by: " + other.name);
+
+        if (other.CompareTag("PlayerCar"))
+        {
+            // LOG 2: Did the tag match work?
+            Debug.Log("Tag check passed for Player!");
+
+            GetComponent<BoxCollider>().enabled = false;
+            //get player stats component  object
+            // We use GetComponentInParent because the collider might be a child of the main Player object
+            PlayerStat stats = other.GetComponentInParent<PlayerStat>();
+
+            if (gLight != null && gLight.enabled)
+            {
+                Debug.Log("Safe: Green Light was ON");
+                stats.SaveTrafficState(true);
+            }
+            else
+            {
+                Debug.Log("Unsafe: Green Light was OFF");
+                stats.SaveTrafficState(false);
+            }
+        }
+        else
+        {
+            // LOG 3: Why was the object ignored?
+            Debug.Log("Object ignored. Tag was: " + other.tag);
+        }
     }
 }
