@@ -16,6 +16,9 @@ public class PlayerStat : MonoBehaviour
     public int lastRoundPoint = 0;
     public bool isWrongDirection = false;
 
+    [Header("safe cross child")]
+    public bool chhildCrossSafe = true;
+
     // Other scripts will call this function
     public void AddCoin(int amount)
     {
@@ -23,18 +26,25 @@ public class PlayerStat : MonoBehaviour
         Debug.Log("Coins Collected: " + coinCount);
     }
 
-    //public void UpdateSavedTime(string newTime)
-    //{
-    //    savedTime = newTime;
-    //    Debug.Log("Time saved in PlayerStat: " + savedTime);
-    //}
+    public void SaveChildCrossState(bool state)
+    {
+        chhildCrossSafe = state;
+        Debug.Log("child safe : " + chhildCrossSafe);
+    }
 
-   
+
     public void SaveTrafficData(string time, float speed)
     {
         savedTime = time;
         speedAtTrigger = speed;
         Debug.Log("Traffic Check! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
+    }
+
+    public void SaveChildCrossRoadData(string time, float speed)
+    {
+        savedTime = time;
+        speedAtTrigger = speed;
+        Debug.Log("child cross! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
     }
 
     public void SaveTrafficState(bool state)

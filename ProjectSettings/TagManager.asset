@@ -11,6 +11,8 @@ TagManager:
   - roundFour
   - roundThree
   - roundTwo
+  - child
+  - humanTrigger
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,6 @@
  
-using UnityEngine;
 using System.Collections; // Required for Coroutines
+using UnityEngine;
 public class PlayerTriggerHandler : MonoBehaviour
 {
     private PlayerStat stats;
@@ -102,7 +102,68 @@ public class PlayerTriggerHandler : MonoBehaviour
         else if (other.CompareTag("roundFour")){ stats.CheckPathPatern(4);
             other.enabled = false;
         }
-    }
+
+
+        if (other.CompareTag("humanTrigger"))
+        {
+
+            other.enabled = false;
+            float currentTime = Time.time;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            // 2. GET THE SPEED (Improved search)
+            // Get the Drivetrain script directly
+            SCC_Drivetrain drivetrain = GetComponentInParent<SCC_Drivetrain>();
+            float actualSpeed = 0f;
+
+            if (drivetrain != null)
+            {
+                actualSpeed = drivetrain.speed; // This is the raw RigidBody speed * 3.6f
+            }
+
+            // Pass the actual physics speed, not the dashboard speed
+            stats.SaveChildCrossRoadData(timeStringT, actualSpeed);
+
+            //move the zebra crossing
+            ZebraCrossingMover mover = other.GetComponentInChildren<ZebraCrossingMover>();
+
+            
+            // Generate a random number between 0 and 1
+            float chance = Random.value;
+
+            if (chance <= 0.7f) // 70% chance
+            {
+                mover.isCrossing = true;
+                Debug.Log("70% Chance hit: Pedestrian is CROSSING.");
+            }
+            else // 30% chance
+            {
+                mover.isCrossing = false;
+                Debug.Log("30% Chance hit: Pedestrian is WAITING.");
+            }
+
+        }
+
+        if (other.CompareTag("child"))
+        {
+            ZebraCrossingMover mover = other.GetComponent<ZebraCrossingMover>();
+            other.enabled = false;
+            if (mover.isCrossing)
+            {
+                stats.SaveChildCrossState(false);
+             //   Debug.LogError("child hit");
+            }
+            else {
+                stats.SaveChildCrossState(true);
+               // Debug.LogError("child not hit");
+            }
+
+        }
+
+
+        }
     
 
  
