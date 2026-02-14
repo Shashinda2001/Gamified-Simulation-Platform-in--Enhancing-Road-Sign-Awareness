@@ -88,6 +88,20 @@ public class PlayerTriggerHandler : MonoBehaviour
 
 
         }
+
+        // 4. Check for Round Triggers
+        if (other.CompareTag("roundOne")) { stats.CheckPathPatern(1);
+            other.enabled = false;
+        }
+        else if (other.CompareTag("roundTwo")){ stats.CheckPathPatern(2);
+            other.enabled = false;
+        }
+        else if (other.CompareTag("roundThree")){ stats.CheckPathPatern(3);
+            other.enabled = false;
+        }
+        else if (other.CompareTag("roundFour")){ stats.CheckPathPatern(4);
+            other.enabled = false;
+        }
     }
     
 

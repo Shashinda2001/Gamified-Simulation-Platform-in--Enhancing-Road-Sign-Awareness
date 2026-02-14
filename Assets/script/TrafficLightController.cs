@@ -88,6 +88,7 @@ public class TrafficLightController : MonoBehaviour
             Debug.Log("Tag check passed for Player!");
 
             GetComponent<BoxCollider>().enabled = false;
+
             //get player stats component  object
             // We use GetComponentInParent because the collider might be a child of the main Player object
             PlayerStat stats = other.GetComponentInParent<PlayerStat>();
