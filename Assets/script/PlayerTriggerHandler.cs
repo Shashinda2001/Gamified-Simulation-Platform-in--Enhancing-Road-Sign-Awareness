@@ -162,8 +162,77 @@ public class PlayerTriggerHandler : MonoBehaviour
 
         }
 
+        if (other.CompareTag("checkEnter"))
+        {
+            other.enabled = false;
+            stats.checkPoint(true);
+               
+        }
+
+
+
+        //train scene
+        if (other.CompareTag("trainTrigger"))
+        {
+
+            other.enabled = false;
+            float currentTime = Time.time;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            // 2. GET THE SPEED (Improved search)
+            // Get the Drivetrain script directly
+            SCC_Drivetrain drivetrain = GetComponentInParent<SCC_Drivetrain>();
+            float actualSpeed = 0f;
+
+            if (drivetrain != null)
+            {
+                actualSpeed = drivetrain.speed; // This is the raw RigidBody speed * 3.6f
+            }
+
+            // Pass the actual physics speed, not the dashboard speed
+            stats.SaveTrainPassData(timeStringT, actualSpeed);
+
+            //move the zebra crossing
+            trainMove mover = other.GetComponentInChildren<trainMove>();
+
+
+            // Generate a random number between 0 and 1
+            float chance = Random.value;
+
+            if (chance <= 0.8f) // 70% chance
+            {
+                mover.isActive = true;
+                Debug.Log("80% chance to train active.");
+            }
+            else // 30% chance
+            {
+                mover.isActive = false;
+                Debug.Log("20% chance to train not active..");
+            }
 
         }
+
+        if (other.CompareTag("train"))
+        {
+            trainMove mover = other.GetComponent<trainMove>();
+            other.enabled = false;
+            if (mover.isActive)
+            {
+                stats.SafeFromTrainState(false);
+                //   Debug.LogError("train hit");
+            }
+            else
+            {
+                stats.SafeFromTrainState(true);
+                // Debug.LogError("train not hit");
+            }
+
+        }
+
+
+    }
     
 
  
