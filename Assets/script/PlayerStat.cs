@@ -19,11 +19,24 @@ public class PlayerStat : MonoBehaviour
     [Header("safe cross child")]
     public bool chhildCrossSafe = true;
 
+    [Header("areas")]
+    private bool enteredArea = false;
+
+    [Header("safe from train")]
+    public bool isplayerSafeFromTrain = true;
+
+
     // Other scripts will call this function
     public void AddCoin(int amount)
     {
         coinCount += amount;
         Debug.Log("Coins Collected: " + coinCount);
+    }
+
+    public void checkPoint(bool cross)
+    {
+        enteredArea=cross;
+        Debug.Log("player enter the area: " + cross);
     }
 
     public void SaveChildCrossState(bool state)
@@ -32,7 +45,18 @@ public class PlayerStat : MonoBehaviour
         Debug.Log("child safe : " + chhildCrossSafe);
     }
 
+    public void SaveTrainPassData(string time, float speed)
+    {
+        savedTime = time;
+        speedAtTrigger = speed;
+        Debug.Log("Train Pass! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
+    }
 
+    public void SafeFromTrainState(bool state)
+    {
+        isplayerSafeFromTrain = state;
+        Debug.Log("safe from train : " + isplayerSafeFromTrain);
+    }
     public void SaveTrafficData(string time, float speed)
     {
         savedTime = time;
