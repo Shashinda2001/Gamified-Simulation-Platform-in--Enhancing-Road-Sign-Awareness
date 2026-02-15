@@ -295,11 +295,49 @@ public class PlayerTriggerHandler : MonoBehaviour
     [Header("References")]
     public TrafficLightController trafficLight;
 
+
+    [Header("Respawn System")]
+    public Transform currentCheckpoint;
+    private Rigidbody rb; // To stop the car's physics
+
     void Start()
     {
         stats = GetComponent<PlayerStat>();
+        rb = GetComponentInParent<Rigidbody>();
+ 
     }
 
+    public void SetCurrentCheckpoint(Transform newPoint)
+    {
+        currentCheckpoint = newPoint;
+    }
+
+    public void RespawnPlayer()
+    {
+        if (currentCheckpoint != null && stats != null && stats.isSpawnNeeded)
+        {
+            // Stop physics
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            // Move THIS object (since script is on parent)
+            transform.position = currentCheckpoint.position;
+            transform.rotation = currentCheckpoint.rotation;
+
+            Debug.Log("Player respawned due to rule violation.");
+            stats.SpawnStateSet(false);
+        }
+        else
+        {
+            Debug.Log("Checkpoint or stats missing.");
+        }
+    }
+
+
+     
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Collectible"))
@@ -429,6 +467,8 @@ public class PlayerTriggerHandler : MonoBehaviour
             stats.checkPoint(true);
         }
 
+
+
         // train scene
         if (other.CompareTag("trainTrigger"))
         {
@@ -500,6 +540,9 @@ public class PlayerTriggerHandler : MonoBehaviour
             Debug.Log("Game Finished! Session Time: " + timeStringT + " | Restarting in 5 seconds...");
             StartCoroutine(RestartTimer());
         }
+
+
+        
     }
 
     IEnumerator RestartTimer()

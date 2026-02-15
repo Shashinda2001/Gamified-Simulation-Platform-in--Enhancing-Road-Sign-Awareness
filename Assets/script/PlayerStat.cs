@@ -25,6 +25,14 @@ public class PlayerStat : MonoBehaviour
     [Header("safe from train")]
     public bool isplayerSafeFromTrain = true;
 
+     public bool isSpawnNeeded = false;
+
+    public void SpawnStateSet(bool state)
+    {
+        isSpawnNeeded = state;
+        Debug.Log("spawn needed : " + isSpawnNeeded);
+    }
+
 
     // Other scripts will call this function
     public void AddCoin(int amount)
@@ -110,6 +118,8 @@ public class PlayerStat : MonoBehaviour
         {
             Debug.LogWarning("WRONG PATTERN! Expected " + (lastRoundPoint + 1) + " but hit " + currentPoint);
             isWrongDirection=true;
+            SpawnStateSet(true);
+
             // Option: Reset lastRoundPoint to 0 so they have to start a new sequence
             lastRoundPoint = 0;
         }

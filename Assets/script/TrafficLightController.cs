@@ -5,7 +5,7 @@ using UnityEngine;
 public class TrafficLightController : MonoBehaviour
 {
 
-     
+
 
     public GameObject redSphere;
     public GameObject yellowSphere;
@@ -28,7 +28,7 @@ public class TrafficLightController : MonoBehaviour
         SetLightStatus(false, false, true);
     }
 
-    
+
     public void StartSequence()
     {
         StartCoroutine(LightRoutine());
@@ -93,15 +93,18 @@ public class TrafficLightController : MonoBehaviour
             // We use GetComponentInParent because the collider might be a child of the main Player object
             PlayerStat stats = other.GetComponentInParent<PlayerStat>();
 
+            PlayerTriggerHandler respawn = other.GetComponentInParent<PlayerTriggerHandler>();
+
             if (gLight != null && gLight.enabled)
             {
                 Debug.Log("Safe: Green Light was ON");
-                stats.SaveTrafficState(true);
+               // stats.SaveTrafficState(true);
             }
             else
             {
                 Debug.Log("Unsafe: Green Light was OFF");
                 stats.SaveTrafficState(false);
+               // respawn.RespawnPlayer();
             }
         }
         else

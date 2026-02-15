@@ -17,6 +17,8 @@ TagManager:
   - train
   - trainTrigger
   - endGame
+  - spw
+  - resp
   layers:
   - Default
   - TransparentFX
