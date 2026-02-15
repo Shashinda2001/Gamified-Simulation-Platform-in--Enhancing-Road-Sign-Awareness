@@ -13,6 +13,9 @@ TagManager:
   - roundTwo
   - child
   - humanTrigger
+  - checkEnter
+  - train
+  - trainTrigger
   layers:
   - Default
   - TransparentFX
