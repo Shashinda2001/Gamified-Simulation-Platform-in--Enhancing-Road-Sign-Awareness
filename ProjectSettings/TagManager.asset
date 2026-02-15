@@ -16,6 +16,7 @@ TagManager:
   - checkEnter
   - train
   - trainTrigger
+  - endGame
   layers:
   - Default
   - TransparentFX

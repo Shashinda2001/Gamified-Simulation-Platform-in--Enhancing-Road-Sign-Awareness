@@ -36,6 +36,15 @@ public class PlayerStat : MonoBehaviour
     public void checkPoint(bool cross)
     {
         enteredArea=cross;
+
+        Debug.Log("player enter the area: " + cross);
+    }
+
+    public void checkPointEnd(bool cross, string time, float speed)
+    {
+        enteredArea = cross;
+        savedTime = time;
+        speedAtTrigger = speed;
         Debug.Log("player enter the area: " + cross);
     }
 

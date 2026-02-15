@@ -8,7 +8,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/start.unity
     guid: 52367630778d4904f9d3d8ea47cbc173
-  - enabled: 1
-    path: Assets/Simple Car Controller/Demo Scenes/SCC_SampleScene.unity
-    guid: 287a16276b4a3ab43b035beb5ee1b07c
   m_configObjects: {}
