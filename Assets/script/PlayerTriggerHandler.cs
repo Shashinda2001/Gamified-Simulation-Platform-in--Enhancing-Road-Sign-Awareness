@@ -391,6 +391,52 @@ public class PlayerTriggerHandler : MonoBehaviour
             }
         }
 
+        //==============
+        if (other.CompareTag("speedCheckDown"))
+        {
+            other.enabled = false;
+            float currentTime = Time.timeSinceLevelLoad;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            // 2. GET THE SPEED
+            SCC_Drivetrain drivetrain = GetComponentInParent<SCC_Drivetrain>();
+            float actualSpeed = 0f;
+
+            if (drivetrain != null)
+            {
+                actualSpeed = drivetrain.speed;
+            }
+
+            stats.roadDangerArea(timeStringT, actualSpeed);
+
+            
+        }
+
+        if (other.CompareTag("speedCheckBump"))
+        {
+            other.enabled = false;
+            float currentTime = Time.timeSinceLevelLoad;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            // 2. GET THE SPEED
+            SCC_Drivetrain drivetrain = GetComponentInParent<SCC_Drivetrain>();
+            float actualSpeed = 0f;
+
+            if (drivetrain != null)
+            {
+                actualSpeed = drivetrain.speed;
+            }
+
+            stats.roadBumpArea(timeStringT, actualSpeed);
+
+
+        }
+        
+
         // 4. Check for Round Triggers
         if (other.CompareTag("roundOne"))
         {
@@ -461,10 +507,63 @@ public class PlayerTriggerHandler : MonoBehaviour
             }
         }
 
+        if (other.CompareTag("people"))
+        {
+            ZebraCrossingMover mover = other.GetComponent<ZebraCrossingMover>();
+            other.enabled = false;
+            if (mover.isCrossing)
+            {
+                stats.SavepeopleCrossState(false);
+            }
+            else
+            {
+                stats.SavepeopleCrossState(true);
+            }
+        }
+
         if (other.CompareTag("checkEnter"))
         {
+
             other.enabled = false;
+            float currentTime = Time.timeSinceLevelLoad;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
             stats.checkPoint(true);
+        }
+
+        
+             if (other.CompareTag("checkEnterNoEntry1"))
+        {
+
+            other.enabled = false;
+            float currentTime = Time.timeSinceLevelLoad;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+            stats.checkClossPoint(true, timeStringT, "checkEnterNoEntry1");
+        }
+
+        if (other.CompareTag("checkEnterNoEntry2"))
+        {
+
+            other.enabled = false;
+            float currentTime = Time.timeSinceLevelLoad;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+            stats.checkClossPoint(true, timeStringT, "checkEnterNoEntry2");
+        }
+
+        if (other.CompareTag("checkEnterNoEntry3"))
+        {
+
+            other.enabled = false;
+            float currentTime = Time.timeSinceLevelLoad;
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            string timeStringT = string.Format("{0:00}:{1:00}", minutes, seconds);
+            stats.checkClossPoint(true, timeStringT, "checkEnterNoEntry3");
         }
 
 
