@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="CheckpointImage" style="flex-grow: 1; align-items: center; justify-content: flex-end; align-self: center; height: 80%; width: 80%; margin-top: 15px; margin-right: 15px; margin-bottom: 15px; margin-left: 15px; -unity-text-align: middle-center; background-color: rgba(172, 44, 44, 0); padding-bottom: 15px; background-image: none;">
+        <ui:Button text="close" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ContinueButton" style="height: 70px; width: 230px; font-size: 30px; -unity-font-style: bold; background-image: none;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -93,6 +93,8 @@ public class PlayerStat : MonoBehaviour
         enteredArea = cross;
         savedTime = time;
         speedAtTrigger = speed;
+        timeHistory.Add(time);
+        speedHistory.Add(speed);
         Debug.Log("player enter the area: " + cross);
 
 
@@ -151,6 +153,9 @@ public class PlayerStat : MonoBehaviour
     {
         savedTime = time;
         speedAtTrigger = speed;
+        timeHistory.Add(time);
+        speedHistory.Add(speed);
+
         Debug.Log("Train Pass! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
     }
 
@@ -257,6 +262,9 @@ public class PlayerStat : MonoBehaviour
     {
         savedTime = time;
         speedAtTrigger = speed;
+        timeHistory.Add(time);
+        speedHistory.Add(speed);
+
         Debug.Log("child cross! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
     }
 

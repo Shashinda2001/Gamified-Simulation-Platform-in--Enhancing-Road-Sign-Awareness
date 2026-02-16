@@ -45,26 +45,40 @@ public class Checkpoint : MonoBehaviour
     [Header("Player position")]
     public GameObject respawnPoint;
 
+
+    public UIController uiController;   // Drag UI Document object here
+    public Sprite imageToShow;          // Assign different image per trigger
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("PlayerCar"))
         {
             // 1. Find the object with tag "spw"
             //GameObject spawnObject = GameObject.FindWithTag("spw");
-            //Debug.Log(" hapu naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ");
+
             if (respawnPoint != null)
             {
                 // 2. Access the player script
                 PlayerTriggerHandler script = other.GetComponentInParent<PlayerTriggerHandler>();
+                PlayerStat playerStat = other.GetComponentInParent<PlayerStat>();
 
-                if (script != null)
+                if (script != null && playerStat!=null)
                 {
                     // 3. Assign the transform of the found "spw" object
                     script.SetCurrentCheckpoint(respawnPoint.transform);
-
+                   
                     Debug.Log("Checkpoint Saved using tag 'spw': " + respawnPoint.name);
-                    script.RespawnPlayer();
+                    
                     GetComponent<BoxCollider>().enabled = false;
+                    if (uiController != null && playerStat.isSpawnNeeded)
+                    {
+                        script.RespawnPlayer();
+                        uiController.ShowImage(imageToShow);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("UIController not assigned!");
+                    }
                 }
                 else
                 {
@@ -78,3 +92,4 @@ public class Checkpoint : MonoBehaviour
         }
     }
 }
+ 
