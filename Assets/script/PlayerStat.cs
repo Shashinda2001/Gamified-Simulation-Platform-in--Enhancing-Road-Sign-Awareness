@@ -25,7 +25,7 @@ public class PlayerStat : MonoBehaviour
     [Header("safe from train")]
     public bool isplayerSafeFromTrain = true;
 
-     public bool isSpawnNeeded = false;
+    public bool isSpawnNeeded = false;
 
     public void SpawnStateSet(bool state)
     {
@@ -44,7 +44,7 @@ public class PlayerStat : MonoBehaviour
     public void checkPoint(bool cross)
     {
         enteredArea=cross;
-
+        if (cross) isSpawnNeeded = true;
         Debug.Log("player enter the area: " + cross);
     }
 
@@ -59,6 +59,7 @@ public class PlayerStat : MonoBehaviour
     public void SaveChildCrossState(bool state)
     {
         chhildCrossSafe = state;
+        if (!state) isSpawnNeeded = true;
         Debug.Log("child safe : " + chhildCrossSafe);
     }
 
@@ -72,6 +73,7 @@ public class PlayerStat : MonoBehaviour
     public void SafeFromTrainState(bool state)
     {
         isplayerSafeFromTrain = state;
+        if (!state) isSpawnNeeded = true;
         Debug.Log("safe from train : " + isplayerSafeFromTrain);
     }
     public void SaveTrafficData(string time, float speed)
@@ -91,6 +93,7 @@ public class PlayerStat : MonoBehaviour
     public void SaveTrafficState(bool state)
     {
         trafficSafety = state;
+        if(!state)isSpawnNeeded=true;
         Debug.Log("traffic safe : " + trafficSafety);
     }
 
