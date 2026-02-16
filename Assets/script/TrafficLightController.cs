@@ -98,7 +98,7 @@ public class TrafficLightController : MonoBehaviour
             if (gLight != null && gLight.enabled)
             {
                 Debug.Log("Safe: Green Light was ON");
-               // stats.SaveTrafficState(true);
+                stats.SaveTrafficState(true);
             }
             else
             {
