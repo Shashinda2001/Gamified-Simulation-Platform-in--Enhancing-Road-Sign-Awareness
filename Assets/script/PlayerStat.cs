@@ -8,6 +8,10 @@ public class PlayerStat : MonoBehaviour
     public int coinCount = 0; // This stores your total coins
     public int currentMark = 0; // This can be used to track the player's current score or mark
 
+    [Header("Traffic History")]
+    public System.Collections.Generic.List<string> timeHistory = new System.Collections.Generic.List<string>();
+    public System.Collections.Generic.List<float> speedHistory = new System.Collections.Generic.List<float>();
+
     // [Header("Player Time")]
     public string savedTime;
 
@@ -94,12 +98,7 @@ public class PlayerStat : MonoBehaviour
         }
     }
 
-    public void SaveChildCrossState(bool state)
-    {
-        chhildCrossSafe = state;
-        if (!state) isSpawnNeeded = true;
-        Debug.Log("child safe : " + chhildCrossSafe);
-    }
+  
 
     public void SaveTrainPassData(string time, float speed)
     {
@@ -118,6 +117,11 @@ public class PlayerStat : MonoBehaviour
     {
         savedTime = time;
         speedAtTrigger = speed;
+
+        // 2. Add to the history (the "Array")
+        timeHistory.Add(time);
+        speedHistory.Add(speed);
+
         Debug.Log(" Check! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
     
     }
@@ -142,7 +146,16 @@ public class PlayerStat : MonoBehaviour
         Debug.Log("child cross! Time: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
     }
 
-    
+    public void SaveChildCrossState(bool state)
+    {
+        chhildCrossSafe = state;
+
+        if (state) { currentMark = currentMark + 10; }
+
+        childCross("CHILD CROSS", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, state, currentMark);
+        if (!state) isSpawnNeeded = true;
+        Debug.Log("child safe : " + chhildCrossSafe);
+    }
 
 
 
@@ -208,6 +221,24 @@ public class PlayerStat : MonoBehaviour
         newEvent.EventType = label;
         newEvent.EntryTime = EntryT;
         newEvent.EntrySpeed = speed;
+        newEvent.IsSafe = safetyStatus;
+        newEvent.ScoreAwarded = currentMark;
+
+        sessionLog.allEvents.Add(newEvent);
+        Debug.Log($"Logged: {label}");
+    }
+
+    // This is a more specific logging method for child crossing events
+    private void childCross(string label, string EntryT, float speed, string EntryO, float speedO, bool safetyStatus, int currentMark)
+    {
+        SimulationEvent newEvent = new SimulationEvent();
+        newEvent.EventType = label;
+        newEvent.EntryTime = EntryT;
+        newEvent.EntrySpeed = speed;
+
+        newEvent.OutcomeTime= EntryO;
+        newEvent.OutcomeSpeed = speedO;
+        
         newEvent.IsSafe = safetyStatus;
         newEvent.ScoreAwarded = currentMark;
 
