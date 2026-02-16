@@ -1879,7 +1879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 184116294522184614, guid: b5093371031d8f042b570850db51e4c8, type: 3}
       propertyPath: m_TagString
-      value: checkEnter
+      value: checkEnterNoEntry2
       objectReference: {fileID: 0}
     - target: {fileID: 704193662844369180, guid: b5093371031d8f042b570850db51e4c8, type: 3}
       propertyPath: m_LocalScale.x
@@ -3053,6 +3053,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedBump Variant (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2295163971527331276, guid: 28d157a82df558249833b453d6026ede, type: 3}
+      propertyPath: m_TagString
+      value: speedCheckBump
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3135,6 +3139,10 @@ PrefabInstance:
     - target: {fileID: 2295163971527331276, guid: 28d157a82df558249833b453d6026ede, type: 3}
       propertyPath: m_Name
       value: SpeedBump Variant (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2295163971527331276, guid: 28d157a82df558249833b453d6026ede, type: 3}
+      propertyPath: m_TagString
+      value: speedCheckBump
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10176,6 +10184,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedBump Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2295163971527331276, guid: 28d157a82df558249833b453d6026ede, type: 3}
+      propertyPath: m_TagString
+      value: speedCheckBump
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10568,6 +10580,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5124374953598677906, guid: bf564510afc6d544c980153293a6302a, type: 3}
+      propertyPath: m_TagString
+      value: people
+      objectReference: {fileID: 0}
     - target: {fileID: 6957775111466708014, guid: bf564510afc6d544c980153293a6302a, type: 3}
       propertyPath: m_Name
       value: crossEvent (1)
@@ -12364,7 +12380,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 184116294522184614, guid: b5093371031d8f042b570850db51e4c8, type: 3}
       propertyPath: m_TagString
-      value: checkEnter
+      value: checkEnterNoEntry1
       objectReference: {fileID: 0}
     - target: {fileID: 704193662844369180, guid: b5093371031d8f042b570850db51e4c8, type: 3}
       propertyPath: m_LocalScale.x
@@ -22985,7 +23001,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 153544193945839577, guid: 38dc3dff6b6c1e14990d0c844a05cdca, type: 3}
       propertyPath: m_TagString
-      value: checkEnter
+      value: checkEnterNoEntry3
       objectReference: {fileID: 0}
     - target: {fileID: 1841725946609744908, guid: 38dc3dff6b6c1e14990d0c844a05cdca, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23346,14 +23362,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinCount: 0
+  currentMark: 0
+  timeHistory: []
+  speedHistory: []
   savedTime: 
   speedAtTrigger: 0
   trafficSafety: 0
   lastRoundPoint: 0
   isWrongDirection: 0
   chhildCrossSafe: 1
+  enteredArea: 0
   isplayerSafeFromTrain: 1
   isSpawnNeeded: 0
+  checkEnterNoEntry1: 0
+  checkEnterNoEntry2: 0
+  checkEnterNoEntry3: 0
 --- !u!1001 &2086321885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24465,6 +24488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpeedBump
       objectReference: {fileID: 0}
+    - target: {fileID: 2295163971527331276, guid: 28d157a82df558249833b453d6026ede, type: 3}
+      propertyPath: m_TagString
+      value: speedCheckBump
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -24616,6 +24643,10 @@ PrefabInstance:
     - target: {fileID: 3432680812244375945, guid: 21bad6e5018914942b59940c72fe7828, type: 3}
       propertyPath: m_Name
       value: speedTimeChecker
+      objectReference: {fileID: 0}
+    - target: {fileID: 3432680812244375945, guid: 21bad6e5018914942b59940c72fe7828, type: 3}
+      propertyPath: m_TagString
+      value: speedCheckDown
       objectReference: {fileID: 0}
     - target: {fileID: 6716616890009669743, guid: 21bad6e5018914942b59940c72fe7828, type: 3}
       propertyPath: m_LocalPosition.x

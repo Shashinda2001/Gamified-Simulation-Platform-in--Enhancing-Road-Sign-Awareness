@@ -34,6 +34,11 @@ public class PlayerStat : MonoBehaviour
 
     public bool isSpawnNeeded = false;
 
+    [Header("events")]
+    public bool checkEnterNoEntry1 = false;
+    public bool checkEnterNoEntry2 = false;
+    public bool checkEnterNoEntry3 = false;
+
     // New: This list holds every recordable moment
     private SaveDataWrapper sessionLog = new SaveDataWrapper();
 
@@ -57,6 +62,31 @@ public class PlayerStat : MonoBehaviour
         if (cross) isSpawnNeeded = true;
         Debug.Log("player enter the area: " + cross);
     }
+    
+        public void checkClossPoint(bool cross, string time,string typeOfEven)
+    {
+        enteredArea = cross;
+        savedTime = time;
+        if (cross) isSpawnNeeded = true;
+
+        if(typeOfEven== "checkEnterNoEntry1")
+        {
+            checkEnterNoEntry1=true;
+            checkEnterNoEntryNegative("Prohibited_Entry_Check", false);
+        }
+        else if(typeOfEven == "checkEnterNoEntry2")
+        {
+            checkEnterNoEntry2=true;
+            checkEnterNoEntryNegative("Prohibited_Entry_Check", false);
+        }
+        else if(typeOfEven == "checkEnterNoEntry3")
+        {
+            checkEnterNoEntry3 = true;
+            checkEnterNoEntryNegative("Construction_Zone_Entry", false);
+        }
+
+        Debug.Log("player enter the area: " + cross);
+    }
 
     public void checkPointEnd(bool cross, string time, float speed)
     {
@@ -68,7 +98,24 @@ public class PlayerStat : MonoBehaviour
 
         if (cross)
         {
-            RecordEvent("Checkpoint Reached", true);
+            if (!checkEnterNoEntry1)
+            {
+                currentMark = currentMark + 10;
+                checkEnterNoEntryPossitive("Prohibited_Entry_Check", true);
+            }
+            if (!checkEnterNoEntry2)
+            {
+                currentMark = currentMark + 10;
+                checkEnterNoEntryPossitive("Prohibited_Entry_Check", true);
+            }
+            if (!checkEnterNoEntry3)
+            {
+                currentMark = currentMark + 10;
+                checkEnterNoEntryPossitive("Construction_Zone_Entry", true);
+            }
+
+            currentMark = currentMark + 10;
+            RecordEvent("Session_Complete_with_Stop_Sign", true, 10);
 
             // 1. Define your specific path
             string customPath = @"D:\research\test1\dataC";
@@ -110,7 +157,15 @@ public class PlayerStat : MonoBehaviour
     public void SafeFromTrainState(bool state)
     {
         isplayerSafeFromTrain = state;
-        if (!state) isSpawnNeeded = true;
+        if (!state)
+        { isSpawnNeeded = true;
+            trainRec("Danger_Railway_Crossing", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, false, 0);
+        }
+        else {
+            currentMark = currentMark + 10;
+            trainRec("Danger_Railway_Crossing", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, true, 10);
+
+        }
         Debug.Log("safe from train : " + isplayerSafeFromTrain);
     }
     public void SaveTrafficData(string time, float speed)
@@ -126,17 +181,76 @@ public class PlayerStat : MonoBehaviour
     
     }
 
+    public void roadDangerArea(string time, float speed)
+    {
+        savedTime = time;
+        speedAtTrigger = speed;
+
+        // 2. Add to the history (the "Array")
+        timeHistory.Add(time);
+        speedHistory.Add(speed);
+
+        if((speed- speedHistory[speedHistory.Count - 2]) < 0.0) { 
+            currentMark = currentMark + 10;
+            //store data in json
+            roadTraps("Sharp_Downward_Slope", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, true, 10);
+
+        }
+        else
+        {
+            roadTraps("Sharp_Downward_Slope", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, false, 0);
+            isSpawnNeeded = true;
+        }
+
+        Debug.Log(" Check! Sharp_Downward_Slope: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
+
+    }
+
+    public void roadBumpArea(string time, float speed)
+    {
+        savedTime = time;
+        speedAtTrigger = speed;
+
+        // 2. Add to the history (the "Array")
+        timeHistory.Add(time);
+        speedHistory.Add(speed);
+
+        if ((speed - speedHistory[speedHistory.Count - 2]) < 0.0)
+        {
+             currentMark = currentMark + 10;
+            //store data in json file
+            roadTraps("Speed_Bump_Compliance", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, true, 10);
+
+        }
+        else
+        {
+            roadTraps("Speed_Bump_Compliance", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, false, 0);
+
+            isSpawnNeeded = true;
+        }
+
+        Debug.Log(" Check! Speed_Bump_Compliance: " + time + " | Speed: " + speed.ToString("F1") + " KMH");
+
+    }
+
     public void SaveTrafficState(bool state)
     {
         trafficSafety = state;
-        if (!state) { isSpawnNeeded = true; } else { currentMark = currentMark + 5; }
+
 
         Debug.Log("traffic safe : " + trafficSafety);
 
-        currentMark = currentMark + 10;
-
-
-        TafficLight("TRAFFIC", savedTime, speedAtTrigger, state, currentMark);
+        if (!state)
+        {
+            isSpawnNeeded = true;
+            TafficLight("Traffic_Compliance", savedTime, speedAtTrigger, state, 0);
+        }
+        else
+        {
+            currentMark = currentMark + 10;
+            TafficLight("Traffic_Compliance", savedTime, speedAtTrigger, state, 10);
+        }
+            
     }
 
     public void SaveChildCrossRoadData(string time, float speed)
@@ -150,11 +264,40 @@ public class PlayerStat : MonoBehaviour
     {
         chhildCrossSafe = state;
 
-        if (state) { currentMark = currentMark + 10; }
+        if (state) { 
+            currentMark = currentMark + 10;
+            childCross("Pedestrian_Crossing_Child", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, state, 10);
 
-        childCross("CHILD CROSS", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, state, currentMark);
-        if (!state) isSpawnNeeded = true;
-        Debug.Log("child safe : " + chhildCrossSafe);
+        }
+        else {
+            childCross("Pedestrian_Crossing_Child", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, state, 0);
+            if (!state) isSpawnNeeded = true;
+
+        }
+
+
+    }
+
+    
+
+         public void SavepeopleCrossState(bool state)
+    {
+        chhildCrossSafe = state;
+
+        if (state)
+        {
+            currentMark = currentMark + 10;
+            childCross("Pedestrian_Crossing_Adult", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, state, 10);
+
+        }
+        else
+        {
+            childCross("Pedestrian_Crossing_Adult", timeHistory[timeHistory.Count - 2], speedHistory[speedHistory.Count - 2], savedTime, speedAtTrigger, state, 0);
+            if (!state) isSpawnNeeded = true;
+
+        }
+
+
     }
 
 
@@ -177,7 +320,7 @@ public class PlayerStat : MonoBehaviour
             lastRoundPoint = currentPoint;
 
             currentMark = currentMark + 10;
-            RecordEvent("round the road ", true);
+            RecordEvent("Roundabout_Entry ", true,10);
         }
         // WRONG: Anything else (Skipping like 1->4 or Reversing like 4->3)
         else if (currentPoint != lastRoundPoint)
@@ -186,7 +329,7 @@ public class PlayerStat : MonoBehaviour
             isWrongDirection=true;
             SpawnStateSet(true);
              
-            RecordEvent("round the road ", false);
+            RecordEvent("Roundabout_Entry ", false,0);
             // Option: Reset lastRoundPoint to 0 so they have to start a new sequence
             lastRoundPoint = 0;
         }
@@ -198,7 +341,7 @@ public class PlayerStat : MonoBehaviour
 
 
     // A helper method to "Log" an event without saving to disk yet
-    private void RecordEvent(string label, bool safetyStatus)
+    private void RecordEvent(string label, bool safetyStatus,int mark)
     {
         SimulationEvent newEvent = new SimulationEvent();
         newEvent.EventType = label;
@@ -206,7 +349,8 @@ public class PlayerStat : MonoBehaviour
         newEvent.EntrySpeed = speedAtTrigger;
         newEvent.IsSafe = safetyStatus;
         //newEvent.coins = coinCount;
-        newEvent.ScoreAwarded = currentMark;
+        newEvent.ScoreAwarded = mark;
+        newEvent.CurrentMark = currentMark;
 
         sessionLog.allEvents.Add(newEvent);
         Debug.Log($"Logged: {label}");
@@ -215,21 +359,21 @@ public class PlayerStat : MonoBehaviour
     //===========================================help to save data in json file===========================================
     
     // This is a more specific logging method for traffic light events
-    private void TafficLight(string label,string EntryT, float speed, bool safetyStatus,int currentMark)
+    private void TafficLight(string label,string EntryT, float speed, bool safetyStatus,int mark)
     {
         SimulationEvent newEvent = new SimulationEvent();
         newEvent.EventType = label;
         newEvent.EntryTime = EntryT;
         newEvent.EntrySpeed = speed;
         newEvent.IsSafe = safetyStatus;
-        newEvent.ScoreAwarded = currentMark;
-
+        newEvent.ScoreAwarded = mark;
+        newEvent.CurrentMark = currentMark;
         sessionLog.allEvents.Add(newEvent);
         Debug.Log($"Logged: {label}");
     }
 
     // This is a more specific logging method for child crossing events
-    private void childCross(string label, string EntryT, float speed, string EntryO, float speedO, bool safetyStatus, int currentMark)
+    private void childCross(string label, string EntryT, float speed, string EntryO, float speedO, bool safetyStatus, int mark)
     {
         SimulationEvent newEvent = new SimulationEvent();
         newEvent.EventType = label;
@@ -240,11 +384,73 @@ public class PlayerStat : MonoBehaviour
         newEvent.OutcomeSpeed = speedO;
         
         newEvent.IsSafe = safetyStatus;
-        newEvent.ScoreAwarded = currentMark;
-
+        newEvent.ScoreAwarded = mark;
+        newEvent.CurrentMark = currentMark;
         sessionLog.allEvents.Add(newEvent);
         Debug.Log($"Logged: {label}");
     }
+
+    // This is a more specific logging method for no entry events
+    private void checkEnterNoEntryPossitive(string label, bool safetyStatus)
+    {
+        SimulationEvent newEvent = new SimulationEvent();
+        newEvent.EventType = label;
+       
+        newEvent.IsSafe = safetyStatus;
+        newEvent.CurrentMark = currentMark;
+        newEvent.ScoreAwarded = 10;
+        sessionLog.allEvents.Add(newEvent);
+        Debug.Log($"Logged: {label}");
+    }
+    // This is a more specific logging method for no entry events
+    private void checkEnterNoEntryNegative(string label, bool safetyStatus)
+    {
+        SimulationEvent newEvent = new SimulationEvent();
+        newEvent.EventType = label;
+        newEvent.OutcomeTime= savedTime;
+        newEvent.IsSafe = safetyStatus;
+        newEvent.CurrentMark = currentMark;
+        newEvent.ScoreAwarded = 0;
+        sessionLog.allEvents.Add(newEvent);
+        Debug.Log($"Logged: {label}");
+    }
+
+    // This is a more specific logging method for road traps events
+    private void roadTraps(string label, string EntryT, float speed, string EntryO, float speedO, bool safetyStatus, int mark)
+    {
+        SimulationEvent newEvent = new SimulationEvent();
+        newEvent.EventType = label;
+        newEvent.EntryTime = EntryT;
+        newEvent.EntrySpeed = speed;
+
+        newEvent.OutcomeTime = EntryO;
+        newEvent.OutcomeSpeed = speedO;
+
+        newEvent.IsSafe = safetyStatus;
+        newEvent.ScoreAwarded = mark;
+        newEvent.CurrentMark = currentMark;
+        sessionLog.allEvents.Add(newEvent);
+        Debug.Log($"Logged: {label}");
+    }
+
+    // This is a more specific logging method for train events
+    private void trainRec(string label, string EntryT, float speed, string EntryO, float speedO, bool safetyStatus, int mark)
+    {
+        SimulationEvent newEvent = new SimulationEvent();
+        newEvent.EventType = label;
+        newEvent.EntryTime = EntryT;
+        newEvent.EntrySpeed = speed;
+
+        newEvent.OutcomeTime = EntryO;
+        newEvent.OutcomeSpeed = speedO;
+
+        newEvent.IsSafe = safetyStatus;
+        newEvent.ScoreAwarded = mark;
+        newEvent.CurrentMark = currentMark;
+        sessionLog.allEvents.Add(newEvent);
+        Debug.Log($"Logged: {label}");
+    }
+
 
 
     //===========================================help to save data in json file===========================================

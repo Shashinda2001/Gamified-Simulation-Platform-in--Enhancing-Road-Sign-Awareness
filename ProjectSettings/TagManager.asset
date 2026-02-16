@@ -19,6 +19,12 @@ TagManager:
   - endGame
   - spw
   - resp
+  - checkEnterNoEntry1
+  - checkEnterNoEntry2
+  - checkEnterNoEntry3
+  - speedCheckDown
+  - speedCheckBump
+  - people
   layers:
   - Default
   - TransparentFX
